@@ -281,7 +281,7 @@ def main(args:Config):
             #     else:
             #         raise ValueError("Invalid query_2d_points file path")
             len_queries = queries.shape[1]
-            batch_size = 10000
+            batch_size = 10
             for i in range(0, len_queries, batch_size):
                 print(f"Processing {i} to {i+batch_size} queries")
                 pred_tracks, pred_visibility, T_Firsts = (
@@ -328,6 +328,8 @@ def main(args:Config):
         # save the tracks
         tracks_vis = pred_tracks[0].detach().cpu().numpy()
         np.save(os.path.join(outdir, f'{args.vid_name}_{args.model}_cam_{video_id}_tracks.npy'), tracks_vis)
+        np_pred_visiblity = pred_visibility[0].detach().cpu().numpy()
+        np.save(os.path.join(outdir, f'{args.vid_name}_{args.model}_cam_{video_id}_visibility.npy'), np_pred_visiblity)
         # save the video
         wide_list = list(video.unbind(1))
         wide_list = [wide[0].permute(1, 2, 0).cpu().numpy() for wide in wide_list]
