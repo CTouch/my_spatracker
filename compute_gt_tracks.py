@@ -48,8 +48,11 @@ class Config:
     vid_name: str
     # path to initialize pcd file
     fused_ply: str
-    # depth dir
     depth_dir: str
+    # directory of all the rgb images
+    rgb_dir: str
+    dataset_type: Literal["hypernerf", "dnerf", "nvidia"]
+    
     query_frame: int = 0
     fps_vis: int = 15
     fps:int = 1
@@ -63,7 +66,7 @@ class Config:
     model: Literal["cotracker", "spatracker"] = "spatracker"
     len_track:int = 10
     point_size:int = 3
-    factor: int = 2
+    # factor: int = 2
     # gpu: int = 0
     # whether to visualize the support points
     vis_support: bool = True
@@ -76,9 +79,18 @@ def main(args:Config):
     # vid_dir = os.path.join(root_dir, args.vid_name + '.mp4')
     # seg_dir = os.path.join(root_dir, args.vid_name + '.png')
     data_dir = args.data_dir
-    datasetjson = json.load(open(os.path.join(data_dir, "dataset.json")))               # TODO only hypernerf dataset
-    metajson = json.load(open(os.path.join(data_dir, "metadata.json")))                 # TODO only hypernerf dataset
-    rgb_dir = os.path.join(data_dir, f"rgb/{args.factor}x")
+    if args.dataset_type == "hypernerf" or args.dataset_type == "dnerf":
+        datasetjson = json.load(open(os.path.join(data_dir, "dataset.json")))       # split json
+        metajson = json.load(open(os.path.join(data_dir, "metadata.json")))         # video ids to tracking, key from datasetjson.
+        video_ids = ["train_ids"]
+    elif args.dataset_type == "nvidia":
+        datasetjson = json.load(open(os.path.join(data_dir, "dataset.json")))       # split json
+        video_ids = ["train_ids"]                                                   # video ids to tracking, key from datasetjson.
+    else:
+        raise ValueError("Invalid dataset type")
+    
+    # rgb_dir = os.path.join(data_dir, "rgb")
+    rgb_dir = args.rgb_dir
     # fused_pcd = o3d.io.read_point_cloud(os.path.join(data_dir, f"colmap/dense/workspace/fused.ply"))
     fused_pcd = o3d.io.read_point_cloud(args.fused_ply)
     fused_pcd = np.asarray(fused_pcd.points)
@@ -89,7 +101,6 @@ def main(args:Config):
     sparse_dir = args.sparse_dir
     colmap_images = read_images_binary(os.path.join(sparse_dir, 'images.bin'))
     colmap_point3d = read_points3d_binary(os.path.join(sparse_dir, "points3D.bin"))
-    video_ids = ["train_ids"]
     video_frames = {}           # {video_id: [frame_0, ...]}
     video_frame_names = {}      # {video_id: [frame_name_0, ...]}
     video_frame_depths = {}     # {video_id: [depth_0, ...]}

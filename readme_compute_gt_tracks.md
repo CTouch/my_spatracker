@@ -1,7 +1,17 @@
 # DEMO
 
 ``` bash
-python compute_gt_tracks.py --model spatracker --data-dir hypernerf_dataset/vrig_chicken/vrig-chicken/ --sparse-dir hypernerf_dataset/vrig_chicken/vrig-chicken/colmap/dense/workspace/sparse/ --vid-name vrig_chicken --len-track 1 --depth-dir hypernerf_dataset/vrig_chicken/vrig-chicken/flow3d_preprocessed/aligned_colmap_depth/2x --fused-ply hypernerf_dataset/vrig_chicken/vrig-chicken/colmap/dense/workspace/fused.ply --factor 2 --outdir vis_result
+python compute_gt_tracks.py \
+    --model spatracker \
+    --data-dir hypernerf_dataset/vrig_chicken/vrig-chicken/ \
+    --sparse-dir hypernerf_dataset/vrig_chicken/vrig-chicken/colmap/dense/workspace/sparse/ \
+    --vid-name vrig_chicken \
+    --len-track 1 \
+    --rgb-dir hypernerf_dataset/vrig_chicken/vrig-chicken/rgb/2x \
+    --depth-dir hypernerf_dataset/vrig_chicken/vrig-chicken/flow3d_preprocessed/aligned_colmap_depth/2x \
+    --fused-ply hypernerf_dataset/vrig_chicken/vrig-chicken/colmap/dense/workspace/fused.ply \
+    --dataset-type hypernerf \
+    --outdir vis_result
 ```
 
 # output
