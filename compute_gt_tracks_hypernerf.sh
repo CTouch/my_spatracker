@@ -1,0 +1,1 @@
+python compute_gt_tracks.py --model spatracker --gpu 0 --data-dir hypernerf_dataset/vrig_chicken/vrig-chicken/ --sparse-dir hypernerf_dataset/vrig_chicken/vrig-chicken/colmap/dense/workspace/sparse/ --vid-name vrig_chicken --len-track 1
